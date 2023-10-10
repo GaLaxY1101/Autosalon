@@ -1,0 +1,14 @@
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\Autosalon.GeneratedMSBuildEditorConfig.editorconfig
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\Autosalon.AssemblyInfoInputs.cache
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\Autosalon.AssemblyInfo.cs
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\Autosalon.csproj.CoreCompileInputs.cache
+D:\Education\Programming\Autosalon\Autosalon\bin\Debug\net6.0\Autosalon.exe
+D:\Education\Programming\Autosalon\Autosalon\bin\Debug\net6.0\Autosalon.deps.json
+D:\Education\Programming\Autosalon\Autosalon\bin\Debug\net6.0\Autosalon.runtimeconfig.json
+D:\Education\Programming\Autosalon\Autosalon\bin\Debug\net6.0\Autosalon.dll
+D:\Education\Programming\Autosalon\Autosalon\bin\Debug\net6.0\Autosalon.pdb
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\Autosalon.dll
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\refint\Autosalon.dll
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\Autosalon.pdb
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\Autosalon.genruntimeconfig.cache
+D:\Education\Programming\Autosalon\Autosalon\obj\Debug\net6.0\ref\Autosalon.dll
