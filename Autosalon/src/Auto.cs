@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Autosalon.src.Interfaces;
 using autosalon_classes.src.Interfaces;
 
 namespace autosalon_classes
 {
-    public enum Colours
-    {
-        black,
-        white,
-        red,
-        yellow,
-        orange,
-        blue
-    }
-    class Auto : IProduct
+
+    class Auto : IProduct, IVehicle
     {
         public int Price { get; set; }
 
@@ -22,7 +15,7 @@ namespace autosalon_classes
         public List<IEngine>  Motors { get; set; }
         public ITransmission Transmission { get; set; }
 
-        public int milage { get; set; }
+        public int Milage { get; set; }
         public String SerialNumber { get; set; }
         
         public Model Model { get; set; }
@@ -30,6 +23,7 @@ namespace autosalon_classes
         public int Mass { get; set; }
         public Colours Colour { get; set; }
         string IProduct.Title { get => Model.Brand + " " + Model.Title;}
+        string IVehicle.Title { get; set; }
 
         public Auto(List<IEngine> Motors, Transmission Transmission, BodyTypes BodyType,
                     String SerialNumber, Colours Colour, 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autosalon.src.Interfaces;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Text;
@@ -7,12 +8,12 @@ namespace autosalon_classes
 {
     class Autosalon
     {
-        public List<Auto> AvailableCars { get; set; }
-        public List<Auto> SoldCars { get; set; }
+        public List<IVehicle> AvailableCars { get; set; }
+        public List<IVehicle> SoldCars { get; set; }
         public String Title {  get; set; }
         public String Address {  get; set; }
        
-        public void SellCar(Auto autoToSell)
+        public void SellCar(IVehicle autoToSell)
         {
             if (AvailableCars.Contains(autoToSell))
             {
@@ -27,8 +28,8 @@ namespace autosalon_classes
         {
             Title = title;
             Address = address;
-            AvailableCars = new List<Auto>();
-            SoldCars = new List<Auto>();
+            AvailableCars = new List<IVehicle>();
+            SoldCars = new List<IVehicle>();
         }
     }
 }
