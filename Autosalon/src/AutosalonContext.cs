@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Autosalon.src.models;
 using autosalon_classes.src.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace Autosalon.src
 {
     public class AutosalonContext : DbContext
     {
         public DbSet<Client> Clients { get; set; } = null!;
-        //public DbSet<Employee> Employees { get; set; } = null!;
+        public DbSet<Employee> Employees { get; set; } = null!;
         ////public DbSet<Operation> Operations { get; set; } = null!;
 
         //public DbSet<FuelTypes> fuelTypes { get; set; } = null!;
@@ -32,15 +33,13 @@ namespace Autosalon.src
         public AutosalonContext(DbContextOptions<AutosalonContext> options)
             : base(options)
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+           
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer("Server=WIN-K9Q7MMLHJIS\\SQLEXPRESS; Database=Autosalon; Integrated Security = true; TrustServerCertificate=true;\r\n");
-            
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+        }
 
     }
 }
