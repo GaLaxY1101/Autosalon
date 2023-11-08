@@ -5,7 +5,7 @@ using System.Text;
 namespace autosalon_classes.src.Interfaces
 {
 
-    internal interface IProduct
+    public interface IProduct
     {
         public string Title { get; }
         public int Price { get; }

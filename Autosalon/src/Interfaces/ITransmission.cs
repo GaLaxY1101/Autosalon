@@ -5,7 +5,7 @@ using System.Text;
 namespace autosalon_classes.src.Interfaces
 {
     public enum transmissionTypesEnum { automatic, manual, robotized }
-    internal interface ITransmission
+    public interface ITransmission
     {
         String Title { get; set; }
 

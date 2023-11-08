@@ -5,7 +5,7 @@ using System.Text;
 namespace autosalon_classes.src.Interfaces
 {
     public enum FuelTypes { Diesel, Petrol, Gasoline, Electricity }
-    internal interface IEngine
+    public interface IEngine
     {
         FuelTypes FuelType { get; set; }
         public String Title { get; set; }

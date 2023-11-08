@@ -5,7 +5,7 @@ using System.Text;
 namespace autosalon_classes.src.Interfaces
 {
     public enum EmployeePositions { Manager, Seller, Director, Cleaner, Mechanic, CallCenterOperator }
-    internal interface IEmployee
+    public interface IEmployee
     {
         EmployeePositions Position { get; set; }
     }
