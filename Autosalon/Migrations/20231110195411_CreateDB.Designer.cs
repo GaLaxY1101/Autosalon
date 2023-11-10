@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autosalon.Migrations
 {
     [DbContext(typeof(AutosalonContext))]
-    [Migration("20231108161809_AddEmployeeModel")]
-    partial class AddEmployeeModel
+    [Migration("20231110195411_CreateDB")]
+    partial class CreateDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,10 +27,13 @@ namespace Autosalon.Migrations
             modelBuilder.Entity("Autosalon.src.models.Client", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("PassportNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -44,9 +47,14 @@ namespace Autosalon.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "PassportNumber")
+                        .HasName("PK_Id_PassportName");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", t =>
+                        {
+                            t.HasCheckConstraint("Age", "Age > 17")
+                                .HasName("CheckForAge");
+                        });
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Employee", b =>
@@ -96,14 +104,44 @@ namespace Autosalon.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Torque")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
+                    b.HasAlternateKey("id", "Title")
+                        .HasName("UniqueMotorTitle");
+
                     b.ToTable("Motors");
+                });
+
+            modelBuilder.Entity("Autosalon.src.models.Transmission", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("SpeedCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(5);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Not set");
+
+                    b.Property<int>("TransmissionType")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Transmissions");
                 });
 #pragma warning restore 612, 618
         }

@@ -32,25 +32,7 @@ namespace Autosalon.src.models
 
         public FuelTypes FuelType { get; set; }
 
-        public float MotorVolume
-        {
-            get => MotorVolume;
-            set
-            {
-                if (value > 0) MotorVolume = value;
-                else throw new ArgumentException("Motor can't have volume < 0.");
-            }
-        }
-
-        public int Torque
-        {
-            get => Torque;
-            set
-            {
-                if (value > 0) MotorVolume = value;
-                else throw new ArgumentException("Motor's torque must be > 0.");
-            }
-        }
+        public int Torque { get; set; }
 
     }
 }

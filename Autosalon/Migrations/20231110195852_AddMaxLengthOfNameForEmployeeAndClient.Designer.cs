@@ -3,6 +3,7 @@ using Autosalon.src;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autosalon.Migrations
 {
     [DbContext(typeof(AutosalonContext))]
-    partial class AutosalonContextModelSnapshot : ModelSnapshot
+    [Migration("20231110195852_AddMaxLengthOfNameForEmployeeAndClient")]
+    partial class AddMaxLengthOfNameForEmployeeAndClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace Autosalon.Migrations
                     b.HasKey("Id", "PassportNumber")
                         .HasName("PK_Id_PassportName");
 
-                    b.ToTable("Clients", null, t =>
+                    b.ToTable("Clients", t =>
                         {
                             t.HasCheckConstraint("Age", "Age > 17")
                                 .HasName("CheckForAge");
@@ -81,7 +84,7 @@ namespace Autosalon.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Motor", b =>
@@ -113,7 +116,7 @@ namespace Autosalon.Migrations
                     b.HasAlternateKey("id", "Title")
                         .HasName("UniqueMotorTitle");
 
-                    b.ToTable("Motors", (string)null);
+                    b.ToTable("Motors");
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Transmission", b =>
@@ -140,7 +143,7 @@ namespace Autosalon.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Transmissions", (string)null);
+                    b.ToTable("Transmissions");
                 });
 #pragma warning restore 612, 618
         }

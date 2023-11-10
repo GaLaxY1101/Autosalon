@@ -23,7 +23,7 @@ namespace Autosalon.src.models
         public int Mass { get; set; }
         public Colours Colour { get; set; }
         string IProduct.Title { get => Model.Brand + " " + Model.Title; }
-        string IVehicle.Title { get; set; }
+        string IVehicle.Title { get; set; } = "Not set";
 
         public Auto(List<IEngine> Motors, Transmission Transmission, BodyTypes BodyType,
                     string SerialNumber, Colours Colour,

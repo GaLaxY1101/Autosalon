@@ -25,19 +25,17 @@ namespace Autosalon.src.models
     }
     public class Model
     {
-        public List<IEngine> AvailableMotors { get; set; } // список моторів, доступних на дану модель
-        public List<Transmission> AvailableTransmissions { get; set; }
+        public List<IEngine> AvailableMotors { get; set; } = new List<IEngine>();
+        // список моторів, доступних на дану модель
+        public List<ITransmission> AvailableTransmissions { get; set; } = new List<ITransmission>();
 
         public string Brand { get; set; }
         public string Title { get; set; }
         public Drives ModelDrive { get; set; } // привод
         public BodyTypes BodyType { get; set; }
 
-
         public Model(string Brand, string Title, Drives ModelDrive, BodyTypes bodyType)
         {
-            AvailableMotors = new List<IEngine>();
-            AvailableTransmissions = new List<Transmission>();
             this.ModelDrive = ModelDrive;
             BodyType = bodyType;
             this.Brand = Brand;

@@ -28,7 +28,7 @@ namespace Autosalon
 
             using (AutosalonContext context = new AutosalonContext(options)) 
             {
-                Client c1 = new Client("Max", "Zoe", "0509854388");
+                Client c1 = new Client("Max", "Zoe", "0509854388",21,"234532567");
                 context.Clients.Add(c1);
                 context.SaveChanges();
             }
