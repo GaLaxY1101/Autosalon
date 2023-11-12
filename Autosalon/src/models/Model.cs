@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 using System.Text;
 
@@ -25,6 +26,8 @@ namespace Autosalon.src.models
     }
     public class Model
     {
+        [Key]
+        public int id {  get; set; }
         public List<IEngine> AvailableMotors { get; set; } = new List<IEngine>();
         // список моторів, доступних на дану модель
         public List<ITransmission> AvailableTransmissions { get; set; } = new List<ITransmission>();

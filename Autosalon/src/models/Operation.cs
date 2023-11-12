@@ -1,7 +1,9 @@
 ﻿using autosalon_classes.src.Interfaces;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Autosalon.src.models
@@ -12,23 +14,38 @@ namespace Autosalon.src.models
         [Key] // Id will be a Primary key in db.
         public int Id {  get; set; }
         public DateTime DateOfOperation { get; set; }
-        public Client Client { get; set; }
-        public Autosalon Autosalon { get; set; }
-        public IEmployee Employee { get; set; }
-        public Auto Auto { get; set; }
+        
+        [ForeignKey("ClientID")]
+        public int ClientID { get; set; }
+        public Client? Client { get; set; }
+
+        //[ForeignKey("AutosalonID")]
+        //public Autosalon Autosalon { get; set; }
+
+        [ForeignKey("EmployeeID")]
+        public int EmployeeID { get; set; }
+        public IEmployee? Employee { get; set; }
+
+        //[ForeignKey("AutoID")]
+        //public Auto Auto { get; set; }
         public int Amount { get; set; }
 
         public OperationStatuses Status { get; set; }
 
-        public Operation(Autosalon autosalon, Employee employee, Client client, Auto auto, OperationStatuses operationStatus)
+        public Operation( Employee employee, Client client, OperationStatuses operationStatus) //Auto auto, Autosalon autosalon,
         {
-            Auto = auto;
+            //Auto = auto;
             DateOfOperation = DateTime.Now;
             Client = client;
-            Autosalon = autosalon;
+            //Autosalon = autosalon;
             Employee = employee;
             Status = operationStatus;
-            Autosalon.SellCar(auto);
+            //Autosalon.SellCar(auto);
+        }
+
+        public Operation()
+        {
+
         }
     }
 }

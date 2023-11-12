@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autosalon.src.models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,5 +9,7 @@ namespace autosalon_classes.src.Interfaces
     public interface IEmployee
     {
         EmployeePositions Position { get; set; }
+
+        List<Operation> Operations { get; set; }
     }
 }

@@ -1,12 +1,15 @@
 ﻿using autosalon_classes.src.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Autosalon.src.models
 {
     public class ElectricEngine : IEngine
     {
+        [Key]
+        public int id {  get; set; }
         public string Title
         {
             get => Title;

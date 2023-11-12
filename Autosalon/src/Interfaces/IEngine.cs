@@ -10,7 +10,6 @@ namespace autosalon_classes.src.Interfaces
         FuelTypes FuelType { get; set; }
         public String Title { get; set; }
         public int HorsePower { get; set; }
-
         public int Torque { get; set; }
 
 

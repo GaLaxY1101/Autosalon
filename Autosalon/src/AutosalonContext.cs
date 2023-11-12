@@ -16,10 +16,12 @@ namespace Autosalon.src
     {
         public DbSet<Client> Clients { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
-        ////public DbSet<Operation> Operations { get; set; } = null!;
+        
+        public DbSet<Operation> Operations { get; set; } = null!;
 
         public DbSet<Motor> Motors { get; set; } = null!;
-        //public DbSet<ElectricEngine> ElectricEngines { get; set; } = null!;
+        public DbSet<ElectricEngine> ElectricEngines { get; set; } = null!;
+
         //public DbSet<Model> Models { get; set; } = null!;
         public DbSet<Transmission> Transmissions { get; set; } = null!;
 
@@ -49,13 +51,14 @@ namespace Autosalon.src
             modelBuilder.Entity<Motor>(MotorConfigure);
             modelBuilder.Entity<Transmission>(TransmissionConfigure);
             modelBuilder.Entity<Employee>(EmployeeConfigure);
-   
+            modelBuilder.Entity<Operation>(OperationConfigure);
         }
 
         //Configure client 
         public void ClientConfigure(EntityTypeBuilder<Client> builder)
         {
-            builder.HasKey(u => new { u.Id, u.PassportNumber }).HasName("PK_Id_PassportName"); //складений первинний ключ
+            //builder.HasKey(u => new { u.Id, u.PassportNumber }).HasName("PK_Id_PassportName"); //складений первинний ключ
+            builder.HasKey(u => u.Id).HasName("PK_Id_PassportName"); 
             builder.ToTable(u => u.HasCheckConstraint("Age", "Age > 17").HasName("CheckForAge")); // обмеження Check 
         }
 
@@ -80,7 +83,37 @@ namespace Autosalon.src
 
         }
 
+        //Configure Operation
+        public void OperationConfigure(EntityTypeBuilder<Operation> builder)
+        {
+            // One client have many operations
+            // One operation have only one client
+            builder
+                .HasOne(c => c.Client)
+                .WithMany(o => o.Operations)
+                .HasForeignKey(c => c.ClientID);
 
+            //One employee have many operations
+            //One operation have only one employee
+            builder
+                .HasOne(e => (Employee)e.Employee!)
+                .WithMany(o => o.Operations)
+                .HasForeignKey(e => e.EmployeeID);
+        }
+
+        //Configure ElectricEngine
+        public void ElectricEngineConfigure(EntityTypeBuilder<Operation> builder)
+        {
+           
+        }
+
+
+
+        //Configure Model
+        //public void ModelConfigure(EntityTypeBuilder<Model> builder)
+        //{
+
+        //}
 
     }
 }
