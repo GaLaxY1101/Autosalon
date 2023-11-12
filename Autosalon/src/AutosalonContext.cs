@@ -52,6 +52,8 @@ namespace Autosalon.src
             modelBuilder.Entity<Transmission>(TransmissionConfigure);
             modelBuilder.Entity<Employee>(EmployeeConfigure);
             modelBuilder.Entity<Operation>(OperationConfigure);
+            modelBuilder.Entity<ElectricEngine>(ElectricEngineConfigure);
+            modelBuilder.Entity<Option>(OptionConfigure);
         }
 
         //Configure client 
@@ -102,12 +104,15 @@ namespace Autosalon.src
         }
 
         //Configure ElectricEngine
-        public void ElectricEngineConfigure(EntityTypeBuilder<Operation> builder)
+        public void ElectricEngineConfigure(EntityTypeBuilder<ElectricEngine> builder)
         {
            
         }
 
+        public void OptionConfigure(EntityTypeBuilder<Option> builder)
+        {
 
+        }
 
         //Configure Model
         //public void ModelConfigure(EntityTypeBuilder<Model> builder)
