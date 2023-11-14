@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autosalon.src.JoinModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,6 +13,6 @@ namespace autosalon_classes.src.Interfaces
         public int HorsePower { get; set; }
         public int Torque { get; set; }
 
-
+        //public List<AutoMotorLink> AutoMotorLinks { get; set; }
     }
 }

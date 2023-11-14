@@ -1,4 +1,5 @@
-﻿using autosalon_classes.src.Interfaces;
+﻿using Autosalon.src.JoinModels;
+using autosalon_classes.src.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,14 +29,15 @@ namespace Autosalon.src.models
     {
         [Key]
         public int id {  get; set; }
-        public List<IEngine> AvailableMotors { get; set; } = new List<IEngine>();
-        // список моторів, доступних на дану модель
-        public List<ITransmission> AvailableTransmissions { get; set; } = new List<ITransmission>();
 
-        public string Brand { get; set; }
-        public string Title { get; set; }
+        public List<Auto> Autos = new List<Auto>();
+
+        public string? Brand { get; set; }
+        public string? Title { get; set; }
         public Drives ModelDrive { get; set; } // привод
         public BodyTypes BodyType { get; set; }
+
+        public Model() { }
 
         public Model(string Brand, string Title, Drives ModelDrive, BodyTypes bodyType)
         {
@@ -44,7 +46,9 @@ namespace Autosalon.src.models
             this.Brand = Brand;
             this.Title = Title;
         }
-
+        public List<ModelMotorLink>? MotorLinks { get; set; }
+        public List<ModelElectricEngineLink>? ElectricEngineLinks { get; set; }
+        public List<ModelTransmissionLink>? ModelTransmissionLinks { get; set; } 
 
     }
 }

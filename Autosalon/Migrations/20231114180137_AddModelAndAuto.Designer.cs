@@ -4,6 +4,7 @@ using Autosalon.src;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autosalon.Migrations
 {
     [DbContext(typeof(AutosalonContext))]
-    partial class AutosalonContextModelSnapshot : ModelSnapshot
+    [Migration("20231114180137_AddModelAndAuto")]
+    partial class AddModelAndAuto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,9 +133,6 @@ namespace Autosalon.Migrations
                     b.Property<int>("ModelID")
                         .HasColumnType("int");
 
-                    b.Property<int>("OperationId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
@@ -145,9 +145,6 @@ namespace Autosalon.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ModelID");
-
-                    b.HasIndex("OperationId")
-                        .IsUnique();
 
                     b.HasIndex("TransmissionId");
 
@@ -334,9 +331,6 @@ namespace Autosalon.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int>("AutoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ClientID")
                         .HasColumnType("int");
 
@@ -356,6 +350,26 @@ namespace Autosalon.Migrations
                     b.HasIndex("EmployeeID");
 
                     b.ToTable("Operations");
+                });
+
+            modelBuilder.Entity("Autosalon.src.models.Option", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Option");
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Transmission", b =>
@@ -507,12 +521,6 @@ namespace Autosalon.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Autosalon.src.models.Operation", "Operation")
-                        .WithOne("Auto")
-                        .HasForeignKey("Autosalon.src.models.Auto", "OperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Autosalon.src.models.Transmission", "Transmission")
                         .WithMany("Autos")
                         .HasForeignKey("TransmissionId")
@@ -520,8 +528,6 @@ namespace Autosalon.Migrations
                         .IsRequired();
 
                     b.Navigation("Model");
-
-                    b.Navigation("Operation");
 
                     b.Navigation("Transmission");
                 });
@@ -592,12 +598,6 @@ namespace Autosalon.Migrations
                     b.Navigation("AutoMotorLinks");
 
                     b.Navigation("ModelMotorLinks");
-                });
-
-            modelBuilder.Entity("Autosalon.src.models.Operation", b =>
-                {
-                    b.Navigation("Auto")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Transmission", b =>

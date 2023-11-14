@@ -1,4 +1,5 @@
-﻿using autosalon_classes.src.Interfaces;
+﻿using Autosalon.src.JoinModels;
+using autosalon_classes.src.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -37,5 +38,20 @@ namespace Autosalon.src.models
 
         public int Torque { get; set; }
 
+        public List<ModelElectricEngineLink> ModelElectricEngineLinks { get; set; } = new List<ModelElectricEngineLink>();
+        public List<AutoElectricEngineLink> AutoElectricEngineLink { get; set; } = new List<AutoElectricEngineLink> { };
+        public ElectricEngine()
+        {
+
+        }
+        public ElectricEngine(int id, string title, int horsePower, int power, FuelTypes fuelType, int torque)
+        {
+            this.id = id;
+            Title = title;
+            HorsePower = horsePower;
+            Power = power;
+            FuelType = fuelType;
+            Torque = torque;
+        }
     }
 }

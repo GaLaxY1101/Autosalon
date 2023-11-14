@@ -9,6 +9,7 @@ using autosalon_classes.src.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
+using Autosalon.src.JoinModels;
 
 namespace Autosalon.src
 {
@@ -22,10 +23,14 @@ namespace Autosalon.src
         public DbSet<Motor> Motors { get; set; } = null!;
         public DbSet<ElectricEngine> ElectricEngines { get; set; } = null!;
 
-        //public DbSet<Model> Models { get; set; } = null!;
+        public DbSet<Model> Models { get; set; } = null!;
         public DbSet<Transmission> Transmissions { get; set; } = null!;
 
-        //public DbSet<Auto> Autos = null!;
+        public DbSet<Auto> Autos = null!;
+
+        //Link entities
+        public DbSet<ModelMotorLink> MotorLinks { get; set; }
+        public DbSet<ModelElectricEngineLink> ElectricEngineLinks { get; set; } 
 
         public AutosalonContext()
         {
@@ -53,8 +58,17 @@ namespace Autosalon.src
             modelBuilder.Entity<Employee>(EmployeeConfigure);
             modelBuilder.Entity<Operation>(OperationConfigure);
             modelBuilder.Entity<ElectricEngine>(ElectricEngineConfigure);
-            modelBuilder.Entity<Option>(OptionConfigure);
+            modelBuilder.Entity<Model>(ModelConfigure);
+            modelBuilder.Entity<ModelMotorLink>(ModelMotorLinkConfigure);
+            modelBuilder.Entity<ModelElectricEngineLink>(ModelElectricEngineLinkConfigure);
+            modelBuilder.Entity<ModelTransmissionLink>(ModelTransmissionLinkConfigure);
+            modelBuilder.Entity<AutoMotorLink>(AutoMotorLinkConfigure);
+            modelBuilder.Entity<AutoElectricEngineLink>(AutoElectricEngineLinkConfigure);
+            modelBuilder.Entity<Auto>(AutoConfigure);
+            modelBuilder.Entity<AutoEquipmentLink>(AutoEquipmentLinkConfigure);
         }
+
+        //==================== Configure models ====================
 
         //Configure client 
         public void ClientConfigure(EntityTypeBuilder<Client> builder)
@@ -100,7 +114,12 @@ namespace Autosalon.src
             builder
                 .HasOne(e => (Employee)e.Employee!)
                 .WithMany(o => o.Operations)
-                .HasForeignKey(e => e.EmployeeID);
+                .HasForeignKey(e => e.EmployeeID);;
+
+            builder
+                .HasOne(o => o.Auto)
+                .WithOne(a => a.Operation)
+                .HasForeignKey<Auto>(a => a.OperationId);
         }
 
         //Configure ElectricEngine
@@ -109,16 +128,126 @@ namespace Autosalon.src
            
         }
 
-        public void OptionConfigure(EntityTypeBuilder<Option> builder)
+        //Configure Model
+        public void ModelConfigure(EntityTypeBuilder<Model> builder)
         {
+            builder.HasKey(m => m.id);
 
+            
         }
 
-        //Configure Model
-        //public void ModelConfigure(EntityTypeBuilder<Model> builder)
-        //{
+        public void AutoConfigure(EntityTypeBuilder<Auto> builder) 
+        {
+            builder.HasKey(a => a.Id);
 
-        //}
+            builder
+                .HasOne(m => m.Model)
+                .WithMany(a => a.Autos)
+                .HasForeignKey(m => m.ModelID);
 
+            builder
+                .HasOne(a => a.Transmission)
+                .WithMany(t => t.Autos)
+                .HasForeignKey(a => a.TransmissionId);
+   
+        }
+        // ============================================================
+
+        //==================== Configure LinkModels ====================
+        public void ModelMotorLinkConfigure(EntityTypeBuilder<ModelMotorLink> builder) 
+        {
+            builder
+                .HasKey(fields => new { fields.MotorId, fields.ModelId });
+            
+            builder
+                .HasOne(ml => ml.Model)
+                .WithMany(m => m.MotorLinks)
+                .HasForeignKey(ml => ml.ModelId);
+
+            builder
+                .HasOne(ml => ml.Motor)
+                .WithMany(m => m.ModelMotorLinks)
+                .HasForeignKey(ml => ml.MotorId);
+              
+        }
+
+        public void ModelElectricEngineLinkConfigure(EntityTypeBuilder<ModelElectricEngineLink> builder)
+        {
+            builder.HasKey(m => new { m.ModelId, m.ElectricEngineId });
+
+            builder
+                .HasOne(ml => ml.Model)
+                .WithMany(m => m.ElectricEngineLinks)
+                .HasForeignKey(ml => ml.ModelId);
+
+            builder
+                 .HasOne(ml => ml.ElectricEngine)
+                 .WithMany(m => m.ModelElectricEngineLinks)
+                 .HasForeignKey(ml => ml.ElectricEngineId);
+        }
+
+        public void ModelTransmissionLinkConfigure(EntityTypeBuilder<ModelTransmissionLink> builder)
+        {
+            builder.HasKey (m => new { m.ModelId, m.TransmissionId });
+
+            builder
+                .HasOne(ml => ml.Model)
+                .WithMany(m => m.ModelTransmissionLinks)
+                .HasForeignKey (ml => ml.ModelId);
+
+            builder
+                .HasOne (ml => ml.Transmission)
+                .WithMany(m => m.ModelTransmissionLinks)
+                .HasForeignKey(ml => ml.ModelId);
+        }
+
+        public void AutoEquipmentLinkConfigure(EntityTypeBuilder<AutoEquipmentLink> builder) 
+        { 
+            builder.HasKey(a => new {a.AutoId, a.EquipmentId});
+
+            builder
+                .HasOne(al => al.Auto)
+                .WithMany(a => a.AutoEquipmentLink)
+                .HasForeignKey(al => al.AutoId);
+
+            builder
+                .HasOne(al => al.Equipment)
+                .WithMany(a => a.AutoEquipmentLink)
+                .HasForeignKey(al => al.EquipmentId);
+        }
+
+        public void AutoMotorLinkConfigure(EntityTypeBuilder<AutoMotorLink> builder) 
+        {
+            builder
+            .HasKey(aml => new { aml.AutoId, aml.MotorId });
+
+            builder
+                .HasOne(aml => aml.Auto)
+                .WithMany(a => a.AutoMotorLink)
+                .HasForeignKey(aml => aml.AutoId);
+
+            builder
+                .HasOne(aml => aml.Motor)
+                .WithMany(m => m.AutoMotorLinks)
+                .HasForeignKey(aml => aml.MotorId);
+        }
+
+
+        public void AutoElectricEngineLinkConfigure(EntityTypeBuilder<AutoElectricEngineLink> builder)
+        {
+            builder
+            .HasKey(aml => new { aml.AutoId, aml.ElectricEngineId });
+
+            builder
+                .HasOne(aml => aml.Auto)
+                .WithMany(a => a.AutoElectricEngineLink)
+                .HasForeignKey(aml => aml.AutoId);
+
+            builder
+                .HasOne(aml => aml.ElectricEngine)
+                .WithMany(m => m.AutoElectricEngineLink)
+                .HasForeignKey(aml => aml.ElectricEngineId);
+        }
+        //============================================================
     }
 }

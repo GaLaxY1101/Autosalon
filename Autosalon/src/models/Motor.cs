@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Autosalon.src.JoinModels;
 using autosalon_classes.src.Interfaces;
 
 namespace Autosalon.src.models
@@ -50,6 +51,11 @@ namespace Autosalon.src.models
                 else throw new ArgumentException("Motor's torque must be > 0.");
             }
         }
+
+        public List<ModelMotorLink> ModelMotorLinks { get; set; } = new List<ModelMotorLink>();
+
+        public List<AutoMotorLink> AutoMotorLinks { get; set; } = new List<AutoMotorLink> { };
+
 
         public Motor(string title, FuelTypes motorType, float motorVolume, int horsePower, int torque)
         {

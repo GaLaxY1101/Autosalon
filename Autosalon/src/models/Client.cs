@@ -22,7 +22,7 @@ namespace Autosalon.src.models
         [Required]
         public string? PassportNumber { get; set; }
 
-        public List<Operation> Operations { get; set; }
+        public List<Operation> Operations { get; set; } = new List<Operation>();
         public Client() { }
         public Client(string firstName, string lastName, string phoneNumber, int age, string passportNumber)
         {

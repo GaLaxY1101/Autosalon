@@ -19,15 +19,15 @@ namespace Autosalon.src.models
         public int ClientID { get; set; }
         public Client? Client { get; set; }
 
-        //[ForeignKey("AutosalonID")]
+
         //public Autosalon Autosalon { get; set; }
 
         [ForeignKey("EmployeeID")]
         public int EmployeeID { get; set; }
         public IEmployee? Employee { get; set; }
 
-        //[ForeignKey("AutoID")]
-        //public Auto Auto { get; set; }
+        public int AutoId { get; set; }
+        public Auto Auto { get; set; }
         public int Amount { get; set; }
 
         public OperationStatuses Status { get; set; }

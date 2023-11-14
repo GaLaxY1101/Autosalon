@@ -1,6 +1,8 @@
-﻿using autosalon_classes.src.Interfaces;
+﻿using Autosalon.src.JoinModels;
+using autosalon_classes.src.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Autosalon.src.models
@@ -14,8 +16,9 @@ namespace Autosalon.src.models
 
         public transmissionTypesEnum TransmissionType { get; set; }
         public int SpeedCount { get; set; }
+        public List<ModelTransmissionLink> ModelTransmissionLinks {  get; set; } = new List<ModelTransmissionLink>();
 
-
+        public List<Auto> Autos { get; set; } = new List<Auto>();
         Transmission() 
         {
             Title = "Not set";
