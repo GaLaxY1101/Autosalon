@@ -51,6 +51,7 @@ namespace Autosalon.src
         //fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
 
             modelBuilder.Entity<Client>(ClientConfigure);
             modelBuilder.Entity<Motor>(MotorConfigure);
@@ -66,6 +67,17 @@ namespace Autosalon.src
             modelBuilder.Entity<AutoElectricEngineLink>(AutoElectricEngineLinkConfigure);
             modelBuilder.Entity<Auto>(AutoConfigure);
             modelBuilder.Entity<AutoEquipmentLink>(AutoEquipmentLinkConfigure);
+
+
+
+            modelBuilder.Entity<Client>().HasData
+                (
+                new Client { Id = 1, FirstName = "Max", LastName = "Stuart", PhoneNumber = "+380994873755", Age = 21, PassportNumber = "246898432" },
+                new Client { Id = 2, FirstName = "Alice", LastName = "Jones", PhoneNumber = "+380509843865", Age = 25, PassportNumber = "250953999" },
+                new Client { Id = 3, FirstName = "Tom", LastName = "Ford", PhoneNumber = "+380504390234", Age = 40, PassportNumber = "895487342" },
+                new Client { Id = 4, FirstName = "Hanry", LastName = "Davis", PhoneNumber = "+380669543866", Age = 33, PassportNumber = "987437677" }
+                );
+
         }
 
         //==================== Configure models ====================
