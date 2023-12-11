@@ -16,9 +16,9 @@ namespace Autosalon.src.models
 
         public transmissionTypesEnum TransmissionType { get; set; }
         public int SpeedCount { get; set; }
-        public List<ModelTransmissionLink> ModelTransmissionLinks {  get; set; } = new List<ModelTransmissionLink>();
+        public virtual List<ModelTransmissionLink> ModelTransmissionLinks {  get; set; } = new List<ModelTransmissionLink>();
 
-        public List<Auto> Autos { get; set; } = new List<Auto>();
+        public virtual List<Auto> Autos { get; set; } = new List<Auto>();
         Transmission() 
         {
             Title = "Not set";

@@ -13,20 +13,20 @@ namespace Autosalon.src.models
         public int Id {  get; set; }
         public int Price { get; set; }
 
-        public List<AutoEquipmentLink> AutoEquipmentLink { get; set; } = new List<AutoEquipmentLink>();
-        public List<AutoMotorLink> AutoMotorLink { get; set; } = new List<AutoMotorLink> { };
-        public List<AutoElectricEngineLink> AutoElectricEngineLink { get; set; } = new List<AutoElectricEngineLink> { };
+        public virtual List<AutoEquipmentLink> AutoEquipmentLink { get; set; } = new List<AutoEquipmentLink>();
+        public virtual List<AutoMotorLink> AutoMotorLink { get; set; } = new List<AutoMotorLink> { };
+        public virtual List<AutoElectricEngineLink> AutoElectricEngineLink { get; set; } = new List<AutoElectricEngineLink> { };
 
         
-        public Operation? Operation { get; set; }
+        public virtual Operation? Operation { get; set; }
         public int OperationId { get; set; }
-        public Transmission? Transmission { get; set; }
+        public virtual Transmission? Transmission { get; set; }
         public int TransmissionId {  get; set; }
         public int Milage { get; set; }
         public string? SerialNumber { get; set; }
 
         public int ModelID { get; set; }
-        public Model? Model { get; set; }
+        public virtual Model? Model { get; set; }
 
         public int Mass { get; set; }
         public Colours Colour { get; set; }

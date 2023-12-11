@@ -30,7 +30,7 @@ namespace Autosalon.src.models
         [Key]
         public int id {  get; set; }
 
-        public List<Auto> Autos = new List<Auto>();
+        public virtual List<Auto> Autos { get; set; } = new List<Auto>();
 
         public string? Brand { get; set; }
         public string? Title { get; set; }
@@ -46,9 +46,9 @@ namespace Autosalon.src.models
             this.Brand = Brand;
             this.Title = Title;
         }
-        public List<ModelMotorLink>? MotorLinks { get; set; }
-        public List<ModelElectricEngineLink>? ElectricEngineLinks { get; set; }
-        public List<ModelTransmissionLink>? ModelTransmissionLinks { get; set; } 
+        public virtual List<ModelMotorLink>? MotorLinks { get; set; }
+        public virtual List<ModelElectricEngineLink>? ElectricEngineLinks { get; set; }
+        public virtual List<ModelTransmissionLink>? ModelTransmissionLinks { get; set; } 
 
     }
 }

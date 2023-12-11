@@ -4,6 +4,7 @@ using Autosalon.src;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autosalon.Migrations
 {
     [DbContext(typeof(AutosalonContext))]
-    partial class AutosalonContextModelSnapshot : ModelSnapshot
+    [Migration("20231206091729_AddClients")]
+    partial class AddClients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,32 +322,6 @@ namespace Autosalon.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FirstName = "Alina",
-                            LastName = "Niechkina",
-                            PhoneNumber = "0508529088",
-                            Position = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FirstName = "Luck",
-                            LastName = "Skywalker",
-                            PhoneNumber = "0995098432",
-                            Position = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FirstName = "Lucy",
-                            LastName = "Johnson",
-                            PhoneNumber = "0669854398",
-                            Position = 5
-                        });
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Equipment", b =>
@@ -434,7 +411,7 @@ namespace Autosalon.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AutoId")
+                    b.Property<int>("AutoId")
                         .HasColumnType("int");
 
                     b.Property<int>("ClientID")
@@ -696,7 +673,8 @@ namespace Autosalon.Migrations
 
             modelBuilder.Entity("Autosalon.src.models.Operation", b =>
                 {
-                    b.Navigation("Auto");
+                    b.Navigation("Auto")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Transmission", b =>

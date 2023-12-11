@@ -30,7 +30,9 @@ namespace Autosalon.src
 
         //Link entities
         public DbSet<ModelMotorLink> MotorLinks { get; set; }
-        public DbSet<ModelElectricEngineLink> ElectricEngineLinks { get; set; } 
+        public DbSet<ModelElectricEngineLink> ElectricEngineLinks { get; set; }
+
+        public IQueryable<Client> GetClientByAge(int age) => FromExpression(() => GetClientByAge(age));
 
         public AutosalonContext()
         {
@@ -45,7 +47,7 @@ namespace Autosalon.src
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
+            optionsBuilder.UseLazyLoadingProxies();
         }
 
         //fluent API
@@ -68,15 +70,27 @@ namespace Autosalon.src
             modelBuilder.Entity<Auto>(AutoConfigure);
             modelBuilder.Entity<AutoEquipmentLink>(AutoEquipmentLinkConfigure);
 
-
+            modelBuilder.HasDbFunction(() => GetClientByAge(default));
 
             modelBuilder.Entity<Client>().HasData
                 (
                 new Client { Id = 1, FirstName = "Max", LastName = "Stuart", PhoneNumber = "+380994873755", Age = 21, PassportNumber = "246898432" },
                 new Client { Id = 2, FirstName = "Alice", LastName = "Jones", PhoneNumber = "+380509843865", Age = 25, PassportNumber = "250953999" },
                 new Client { Id = 3, FirstName = "Tom", LastName = "Ford", PhoneNumber = "+380504390234", Age = 40, PassportNumber = "895487342" },
-                new Client { Id = 4, FirstName = "Hanry", LastName = "Davis", PhoneNumber = "+380669543866", Age = 33, PassportNumber = "987437677" }
+                new Client { Id = 4, FirstName = "Hanry", LastName = "Davis", PhoneNumber = "+380669543866", Age = 33, PassportNumber = "987437677" },
+                new Client { Id = 5, FirstName = "Alex", LastName = "Moshi", PhoneNumber = "+380559543866", Age = 55, PassportNumber = "987444677" },
+                new Client { Id = 6, FirstName = "Mrritz", LastName = "Luckk", PhoneNumber = "+380665584093", Age = 21, PassportNumber = "9812317677" },
+                new Client { Id = 7, FirstName = "John", LastName = "Moore", PhoneNumber = "+380669533212", Age = 20, PassportNumber = "9498843233" },
+                new Client { Id = 8, FirstName = "Xenia", LastName = "Amoore", PhoneNumber = "+380669543822", Age = 18, PassportNumber = "977737677" }
                 );
+
+            modelBuilder.Entity<Employee>().HasData
+                (
+                    new Employee { Id = 1, FirstName = "Alina", LastName = "Niechkina", PhoneNumber = "0508529088", Position = EmployeePositions.Manager },
+                    new Employee { Id = 2, FirstName = "Luck", LastName = "Skywalker", PhoneNumber = "0995098432", Position = EmployeePositions.Director },
+                    new Employee { Id = 3, FirstName = "Lucy", LastName = "Johnson", PhoneNumber = "0669854398", Position = EmployeePositions.CallCenterOperator }
+                );
+
 
         }
 

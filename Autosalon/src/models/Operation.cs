@@ -17,17 +17,17 @@ namespace Autosalon.src.models
         
         [ForeignKey("ClientID")]
         public int ClientID { get; set; }
-        public Client? Client { get; set; }
+        public virtual Client? Client { get; set; }
 
 
         //public Autosalon Autosalon { get; set; }
 
         [ForeignKey("EmployeeID")]
         public int EmployeeID { get; set; }
-        public IEmployee? Employee { get; set; }
+        public virtual IEmployee? Employee { get; set; }
 
-        public int AutoId { get; set; }
-        public Auto Auto { get; set; }
+        public int? AutoId { get; set; }
+        public virtual Auto? Auto { get; set; }
         public int Amount { get; set; }
 
         public OperationStatuses Status { get; set; }

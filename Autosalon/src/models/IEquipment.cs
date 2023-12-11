@@ -14,7 +14,7 @@ namespace Autosalon.src.models
         public string? Title { get; set; }
         public string? Description { get;set; }
 
-        public List<AutoEquipmentLink>? AutoEquipmentLink { get; set; }
+        public virtual List<AutoEquipmentLink>? AutoEquipmentLink { get; set; }
         public Equipment() { }
 
         public Equipment(int id, string? title, string? description)

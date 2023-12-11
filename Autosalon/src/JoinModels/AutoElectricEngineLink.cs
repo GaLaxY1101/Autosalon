@@ -9,11 +9,11 @@ namespace Autosalon.src.JoinModels
 {
     public class AutoElectricEngineLink
     {
-        public Auto? Auto { get; set; }
+        public virtual Auto? Auto { get; set; }
 
         public int AutoId { get; set; }
 
-        public ElectricEngine? ElectricEngine { get; set; }
+        public virtual ElectricEngine? ElectricEngine { get; set; }
 
         public int ElectricEngineId { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using autosalon_classes.src.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,7 +23,8 @@ namespace Autosalon.src.models
         [Required]
         public string? PassportNumber { get; set; }
 
-        public List<Operation> Operations { get; set; } = new List<Operation>();
+
+        public virtual List<Operation> Operations { get; set; } = new List<Operation>();
         public Client() { }
         public Client(string firstName, string lastName, string phoneNumber, int age, string passportNumber)
         {

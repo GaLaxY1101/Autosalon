@@ -8,8 +8,8 @@ namespace Autosalon.src.models
 {
     public class Autosalon
     {
-        public List<IVehicle> AvailableCars { get; set; }
-        public List<IVehicle> SoldCars { get; set; }
+        public virtual List<IVehicle> AvailableCars { get; set; }
+        public virtual List<IVehicle> SoldCars { get; set; }
         public string Title { get; set; }
         public string Address { get; set; }
 

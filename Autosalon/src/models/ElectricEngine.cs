@@ -38,8 +38,8 @@ namespace Autosalon.src.models
 
         public int Torque { get; set; }
 
-        public List<ModelElectricEngineLink> ModelElectricEngineLinks { get; set; } = new List<ModelElectricEngineLink>();
-        public List<AutoElectricEngineLink> AutoElectricEngineLink { get; set; } = new List<AutoElectricEngineLink> { };
+        public virtual List<ModelElectricEngineLink> ModelElectricEngineLinks { get; set; } = new List<ModelElectricEngineLink>();
+        public virtual List<AutoElectricEngineLink> AutoElectricEngineLink { get; set; } = new List<AutoElectricEngineLink> { };
         public ElectricEngine()
         {
 

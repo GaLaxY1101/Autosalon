@@ -26,6 +26,7 @@ namespace Autosalon.src
             string connectionString = config.GetConnectionString("DefaultConnection");
             optionsBuilder.UseSqlServer(connectionString);
             return new AutosalonContext(optionsBuilder.Options);
+
         }
 
 

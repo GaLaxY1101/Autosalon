@@ -52,9 +52,9 @@ namespace Autosalon.src.models
             }
         }
 
-        public List<ModelMotorLink> ModelMotorLinks { get; set; } = new List<ModelMotorLink>();
+        public virtual List<ModelMotorLink> ModelMotorLinks { get; set; } = new List<ModelMotorLink>();
 
-        public List<AutoMotorLink> AutoMotorLinks { get; set; } = new List<AutoMotorLink> { };
+        public virtual List<AutoMotorLink> AutoMotorLinks { get; set; } = new List<AutoMotorLink> { };
 
 
         public Motor(string title, FuelTypes motorType, float motorVolume, int horsePower, int torque)

@@ -4,6 +4,7 @@ using Autosalon.src;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Autosalon.Migrations
 {
     [DbContext(typeof(AutosalonContext))]
-    partial class AutosalonContextModelSnapshot : ModelSnapshot
+    [Migration("20231207125357_ChangeOperation")]
+    partial class ChangeOperation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,32 +322,6 @@ namespace Autosalon.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FirstName = "Alina",
-                            LastName = "Niechkina",
-                            PhoneNumber = "0508529088",
-                            Position = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FirstName = "Luck",
-                            LastName = "Skywalker",
-                            PhoneNumber = "0995098432",
-                            Position = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FirstName = "Lucy",
-                            LastName = "Johnson",
-                            PhoneNumber = "0669854398",
-                            Position = 5
-                        });
                 });
 
             modelBuilder.Entity("Autosalon.src.models.Equipment", b =>
