@@ -7,74 +7,209 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Client.Extensions.Msal;
+using System;
+using System.CodeDom.Compiler;
+using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 
 namespace Autosalon
 {
     internal class Program
     {
+        public static Mutex? mutex { get; set; } = new Mutex();
+
+        public static Semaphore sem { get; set; } = new Semaphore(1, 2);
+        
         static void Main(string[] args)
         {
-            var builder = new ConfigurationBuilder();
+            ContextFactory cf = new ContextFactory();
 
-            // установка пути к текущему каталогу
-            builder.SetBasePath(Directory.GetCurrentDirectory());
+            var context = cf.CreateDbContext(new[] { "DefaultConnection" });
 
-            // получаем конфигурацию из файла appsettings.json
-            builder.AddJsonFile("appsettings.json");
+            //// Example of using monitor 
+            //Thread myThread = new(GenerateClientsThread1);
+            //Thread myThread2 = new(GenerateClientsThread2);
 
-            // создаем конфигурацию
-            var config = builder.Build();
+            //myThread.Start(context);
+            //myThread2.Start(context);
 
-            // получаем строку подключения
-            String connectionString = config.GetConnectionString("DefaultConnection");
+            //// Example of using mutex
 
-            var optionsBuilder = new DbContextOptionsBuilder<AutosalonContext>();
-            var options = optionsBuilder.UseSqlServer(connectionString).Options;
+            //Thread myThread3 = new(GenerateClientsThread3);
+            //Thread myThread4 = new(GenerateClientsThread4);
 
-            using (AutosalonContext context = new AutosalonContext(options))
+            //myThread3.Start(context);
+            //myThread4.Start(context);
+
+            // Semaphore
+            //Thread myThread5 = new Thread(GenerateClientsThread5);
+            
+            ////Read data (monitor)
+            //for (int i = 0; i < 4; i++) 
+            //{
+            //    Thread t1 = new(PrintClientsMonitor);
+            //    t1.Name = $"Thread {i}";
+            //    t1.Start(context);
+            //}
+
+            //Read data (task)
+
+
+            var outer = Task.Factory.StartNew(() =>      // зовнішнє завдання
             {
-                //context.Operations.Add(new Operation { DateOfOperation = DateTime.Now, ClientID = 1, EmployeeID = 1, Amount = 1, Status = OperationStatuses.Completed });
-                //context.Operations.Add(new Operation { DateOfOperation = DateTime.Now, ClientID = 2, EmployeeID = 1, Amount = 1, Status = OperationStatuses.Completed });
-                //context.Operations.Add(new Operation { DateOfOperation = DateTime.Now, ClientID = 2, EmployeeID = 2, Amount = 1, Status = OperationStatuses.Completed });
-                //context.Operations.Add(new Operation { DateOfOperation = DateTime.Now, ClientID = 3, EmployeeID = 3, Amount = 1, Status = OperationStatuses.Completed });
-                //context.Operations.Add(new Operation { DateOfOperation = DateTime.Now, ClientID = 4, EmployeeID = 1, Amount = 1, Status = OperationStatuses.NotPaid });
-                //context.Operations.Add(new Operation { DateOfOperation = DateTime.Now, ClientID =5, EmployeeID = 1, Amount = 1, Status = OperationStatuses.Pending });
+                Console.WriteLine("Outer task starting...");
+                foreach(Client c in context.Clients.ToList()) Console.WriteLine($"Task {Task.CurrentId}: {c.FirstName} {c.LastName}");
 
-
-
-                //var Clients = context.Clients.ToList();
-                //Console.WriteLine("Clients:");
-                //foreach (var client in Clients)
-                //{
-                //    Console.WriteLine("First name: " + client.FirstName +
-                //        "\nLast name: " + client.LastName +
-                //        "\nPhoneNumber: " + client.PhoneNumber +
-                //        "\nAge: " + client.Age +
-                //        "\n======================================"
-                //        );
-                //}
-
-
-
-
-            }
-
-
+                Console.WriteLine($"Task {Task.CurrentId}: {context.Clients.First().FirstName} {context.Clients.First().LastName}");
+                var inner = Task.Factory.StartNew(() =>  // вкладене завдання
+                {
+                    Console.WriteLine($"Inner task({Task.CurrentId}) starting...");
+                    Thread.Sleep(2000);
+                    foreach (Client c in context.Clients.ToList()) Console.WriteLine($"Task {Task.CurrentId}: {c.FirstName} {c.LastName}");
+                    Console.WriteLine("Inner task finished.");
+                }, TaskCreationOptions.AttachedToParent);
+            });
+            outer.Wait();
+            Console.WriteLine("End of Main");
         }
 
+
+        public static void GenerateClientsThread1(object? contextArg)
+        {
+            if (contextArg is AutosalonContext context)
+            {
+                bool acquiredLock = false;
+                try
+                {
+                    Monitor.Enter(context, ref acquiredLock);
+                    context.Clients.Add(new Client { FirstName = "Serhii", LastName = "Shevchenko", Age = 35, PassportNumber = "92321", PhoneNumber = "0507799438" });
+                    Console.WriteLine("Thread1: First client added");
+                    context.Clients.Add(new Client { FirstName = "Illia", LastName = "Pop", Age = 20, PassportNumber = "92133", PhoneNumber = "0508599438" });
+                    Console.WriteLine("Thread1: The second client added");
+                    context.SaveChanges();
+                }
+                finally
+                {
+                    if (acquiredLock) Monitor.Exit(context);
+                }
+            }
+        }
+        public static void GenerateClientsThread2(object? contextArg)
+            {
+
+                if (contextArg is AutosalonContext context)
+                {
+                    bool acquiredLock = false;
+                    try
+                    {
+                        Monitor.Enter(context, ref acquiredLock);
+                        context.Clients.Add(new Client { FirstName = "Lucy", LastName = "Rock", Age = 22, PassportNumber = "92121", PhoneNumber = "0508399433" });
+                        Console.WriteLine("Thread2: First client added");
+                        context.Clients.Add(new Client { FirstName = "Olia", LastName = "Blackwood", Age = 22, PassportNumber = "92311", PhoneNumber = "0507799431" });
+                        Console.WriteLine("Thread2: The second client added");
+                        context.SaveChanges();
+                    }
+                    finally
+                    {
+                        if (acquiredLock) Monitor.Exit(context);
+                    }
+                }
+            }
+        public static void GenerateClientsThread3(object? contextArg)
+        {
+            if (contextArg is AutosalonContext context)
+            {
+                mutex.WaitOne();
+                context.Clients.Add(new Client { FirstName = "Nadia", LastName = "Koval", Age = 33, PassportNumber = "82321", PhoneNumber = "0507799455" });
+                Console.WriteLine("Thread3: First client added");
+                context.Clients.Add(new Client { FirstName = "Carlo", LastName = "Ball", Age = 66, PassportNumber = "92223", PhoneNumber = "0502199438" });
+                Console.WriteLine("Thread3: The second client added");
+                context.SaveChanges();
+
+                mutex.ReleaseMutex();
+            }
+        }
+
+        public static void GenerateClientsThread4(object? contextArg)
+        {
+            if (contextArg is AutosalonContext context)
+            {
+                mutex.WaitOne();
+
+                context.Clients.Add(new Client { FirstName = "Bob", LastName = "Carrol", Age = 41, PassportNumber = "22321", PhoneNumber = "0507819455" });
+                Console.WriteLine("Thread4: First client added");
+                context.Clients.Add(new Client { FirstName = "Luc", LastName = "Sky", Age = 25, PassportNumber = "92123", PhoneNumber = "0503299438" });
+                Console.WriteLine("Thread4: The second client added");
+                context.SaveChanges();
+
+                mutex.ReleaseMutex();
+            }
+        }
+
+        public static void GenerateClientsThread5(object? contextArg)
+        {
+            if (contextArg is AutosalonContext context)
+            {
+                sem.WaitOne();
+
+                context.Clients.Add(new Client { FirstName = "Bob", LastName = "Carrol", Age = 41, PassportNumber = "22321", PhoneNumber = "0507819455" });
+                Console.WriteLine("Thread4: First client added");
+                context.Clients.Add(new Client { FirstName = "Luc", LastName = "Sky", Age = 25, PassportNumber = "92123", PhoneNumber = "0503299438" });
+                Console.WriteLine("Thread4: The second client added");
+                context.SaveChanges();
+
+                sem.Release();
+            }
+        }
+
+        public static void PrintClientsMonitor(object?  contextArg)
+        {
+            if (contextArg is AutosalonContext context)
+            {
+                bool acquiredLock = false;
+                try
+                {
+                    Monitor.Enter(context,ref  acquiredLock);
+                    foreach (Client c in context.Clients.ToList()) Console.WriteLine($"{Thread.CurrentThread.Name} : {c.FirstName} {c.LastName}");
+
+                }
+                finally
+                {
+                    if (acquiredLock) Monitor.Exit(context);
+                }
+            }
+        }
+
+        public static void PrintClientsMutex()
+            {
+                Mutex mutexObj = new();
+
+                mutexObj.WaitOne();     // Зупиняємо потік до отримання мьютексу
+
+                ContextFactory cf = new ContextFactory();
+                using (var context = cf.CreateDbContext(new[] { "DefaultConnection" }))
+                {
+                    foreach (Client client in context.Clients.ToList())
+                    {
+                        Console.WriteLine($"{Thread.CurrentThread.Name}: {client.FirstName} {client.LastName}");
+                        //Thread.Sleep(100);
+                    }
+                }
+                mutexObj.ReleaseMutex();    // звільняємо м'ютекс
+            }
 
         public static void IntersectExample(AutosalonContext context)
         {
             var cls = context.Clients.Where(a => a.Age > 25).Intersect(context.Clients.Where(b => b.PassportNumber.StartsWith("9")));
 
             var Clients = context.Clients.ToList();
-            
+
 
         }
-        
+
         public static void UnionExample(AutosalonContext context)
         {
             var cls = context.Clients.Where(a => a.Age > 25).Union(context.Clients.Where(b => b.PassportNumber.StartsWith("9")));
@@ -112,16 +247,11 @@ namespace Autosalon
             foreach (var v in dist) Console.WriteLine(v.ToString());
         }
 
-        public static void AsyncExample(AutosalonContext context)
-        {
-
-        }
-
         public static void GroupByAndAggregateFunctionsEcample(AutosalonContext context)
         {
-                var ls = context.Operations
-                    .GroupBy(o => o.EmployeeID)
-                    .Select(s => new { Key = s.Key, Count = s.Count() });
+            var ls = context.Operations
+                .GroupBy(o => o.EmployeeID)
+                .Select(s => new { Key = s.Key, Count = s.Count() });
 
 
             foreach (var v in ls) Console.WriteLine($"Key: {v.Key} \n Count: {v.Count} \n");
@@ -133,13 +263,13 @@ namespace Autosalon
             Console.WriteLine(minId);
         }
 
-        public static void EagerLoadingExample(AutosalonContext context) 
+        public static void EagerLoadingExample(AutosalonContext context)
         {
             var emoployeeOperation = context.Operations.Include(e => e.Employee).ToList();
             foreach (var e in emoployeeOperation) Console.WriteLine($"Operation id:{e.Id} \nEmployee: {((Employee)e.Employee).FirstName} {((Employee)e.Employee).LastName} \n");
         }
 
-        public static void ExplicitLoadingExample(AutosalonContext context) 
+        public static void ExplicitLoadingExample(AutosalonContext context)
         {
             var employeeExplicitLoad = context.Employees.FirstOrDefault();
             context.Operations.Where(o => o.EmployeeID == employeeExplicitLoad.Id).Load();
@@ -189,7 +319,7 @@ namespace Autosalon
             idParam.Value = 2;
 
 
-            context.Database.ExecuteSqlRaw("EXEC GetClientNameById @id, @name OUT", idParam,nameParam);
+            context.Database.ExecuteSqlRaw("EXEC GetClientNameById @id, @name OUT", idParam, nameParam);
             Console.WriteLine(nameParam.Value);
         }
 
